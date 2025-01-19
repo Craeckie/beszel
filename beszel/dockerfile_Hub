@@ -11,14 +11,17 @@ COPY *.go ./
 COPY cmd ./cmd
 COPY internal ./internal
 COPY migrations ./migrations
-COPY site/dist ./site/dist
-COPY site/*.go ./site
+COPY site ./site
 
 RUN apk add --no-cache \
     unzip \
-    ca-certificates
+    ca-certificates \
+    npm
 
 RUN update-ca-certificates
+
+RUN npm install --prefix ./site && \
+    npm run --prefix ./site build
 
 # Build
 ARG TARGETOS TARGETARCH
